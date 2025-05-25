@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Registration | Ibrahim Ameen Clinic</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-blue: #005b96;
+            --secondary-blue: #03396c;
+            --accent-gold: #b3a369;
+            --light-gray: #f8f9fa;
+            --dark-gray: #343a40;
+            --input-border: #ced4da;
+            --input-focus: rgba(0, 91, 150, 0.2);
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: var(--light-gray);
+            color: var(--dark-gray);
+            line-height: 1.6;
+            background-image: url('https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            background-blend-mode: overlay;
+            background-color: rgba(248, 249, 250, 0.9);
+        }
+        
+        .registration-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            padding: 2.5rem;
+            width: 800px;
+            text-align: center;
+            border-top: 4px solid var(--accent-gold);
+        }
+        
+        .clinic-logo {
+            font-size: 2.5rem;
+            color: var(--primary-blue);
+            margin-bottom: 1.5rem;
+        }
+        
+        .registration-title {
+            font-size: 1.5rem;
+            color: var(--secondary-blue);
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            position: relative;
+        }
+        
+        .registration-title::after {
+            content: '';
+            position: absolute;
+            width: 50px;
+            height: 2px;
+            background-color: var(--accent-gold);
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group {
+            flex: 1;
+            text-align: left;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--secondary-blue);
+        }
+        
+        .input-field {
+            position: relative;
+            border: 1px solid var(--input-border);
+            border-radius: 4px;
+            padding: 0;
+            transition: all 0.3s ease;
+            background-color: white;
+            height: 48px;
+        }
+        
+        .input-field:focus-within {
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 2px var(--input-focus);
+        }
+        
+        .input-field i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary-blue);
+            font-size: 1rem;
+        }
+        
+        .input-field input {
+            width: 100%;
+            height: 100%;
+            padding: 0 1rem 0 2.5rem;
+            border: none;
+            background: transparent;
+            font-size: 1rem;
+            outline: none;
+        }
+        
+        .btn-register {
+            width: 200px;
+            padding: 0.8rem;
+            background-color: var(--primary-blue);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 1.5rem auto 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn-register:hover {
+            background-color: var(--secondary-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .login-link {
+            display: block;
+            margin-top: 1.5rem;
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--dark-gray);
+        }
+        
+        .login-link a {
+            color: var(--primary-blue);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+        
+        .footer-text {
+            margin-top: 2rem;
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+
+        #customAlert {
+            display: none;
+            position: fixed;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #f44336;
+            color: #fff;
+            padding: 16px 32px;
+            border-radius: 6px;
+            z-index: 9999;
+            min-width: 250px;
+            text-align: center;
+        }
+        
+        @media (max-width: 900px) {
+            .registration-container {
+                width: 90%;
+            }
+            
+            .form-row {
+                flex-wrap: wrap;
+            }
+            
+            .form-group {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="registration-container">
+        <div class="clinic-logo">
+            <i class="fas fa-hospital-alt"></i>
+        </div>
+        <h1 class="registration-title">Patient Registration</h1>
+        
+        <form id="registrationForm">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="fullName">Full Name</label>
+                    <div class="input-field">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="fullName" placeholder="Enter your full name" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <div class="input-field">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <div class="input-field">
+                        <i class="fas fa-phone"></i>
+                        <input type="tel" id="phone" placeholder="Enter your phone" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="input-field">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="password" name="password" placeholder="password" required>
+                    </div>
+                </div>
+            </div>
+            
+            <button type="submit" class="btn-register">
+                <i class="fas fa-user-plus"></i> Register
+            </button>
+        </form>
+        
+        <div class="login-link">
+            Already have an account? <a href="./login.html">Login here</a>
+        </div>
+        
+        <div class="footer-text">
+            © 2025 Ibrahim Ameen Clinic. All rights reserved.
+        </div>
+    </div>
+
+    <div id="customAlert" style="display:none;position:fixed;top:30px;left:50%;transform:translateX(-50%);background:#f44336;color:#fff;padding:16px 32px;border-radius:6px;z-index:9999;min-width:250px;text-align:center;">
+        <span id="alertMessage"></span>
+    </div>
+
+    <script>
+document.getElementById("registrationForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    var email = document.getElementById("email").value.trim().toLowerCase();
+    var password = document.getElementById("password").value.trim();
+
+    // Show email and password in the browser console
+    console.log("Email:", email);
+    console.log("Password:", password);
+
+    var formData = new FormData();
+    formData.append("email", email);
+    formData.append("password", password);
+
+    fetch("../PhP/register_check.php", {
+        method: "POST",
+        body: formData
+    })
+    .then(response => response.text())
+    .then(data => {
+        if (data.startsWith("success:")) {
+            const email = data.split(":")[1];
+            showAlert("✅ You are allowed to register.", true);
+
+            setTimeout(() => {
+                if (email === "dr.dr@dr.com") {
+                    window.location.href = "bookingInfo.html";
+                } else if (email === "client@client.com") {
+                    window.location.href = "Booking.html";
+                } else if (email === "admin@admin.com") {
+                    window.location.href = "editBooking.html";
+                } else {
+                    showAlert("⚠️ Unknown user role. Access denied.");
+                }
+            }, 1200);
+
+        } else if (data === "not_found") {
+            showAlert("❌ Email or password is incorrect.");
+        } else if (data.startsWith("error")) {
+            showAlert("⚠️ Server error: " + data);
+        } else {
+            showAlert("⚠️ Unexpected response: " + data);
+        }
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        showAlert("❌ A network error occurred. Please try again.");
+    });
+});
+
+// Alert function
+function showAlert(message, isSuccess = false) {
+    const alertBox = document.getElementById("customAlert");
+    const alertMessage = document.getElementById("alertMessage");
+
+    alertMessage.textContent = message;
+    alertBox.style.backgroundColor = isSuccess ? "#4CAF50" : "#f44336"; // green or red
+    alertBox.style.display = "block";
+
+    setTimeout(() => {
+        alertBox.style.display = "none";
+    }, 3000);
+}
+
+// Phone number formatting
+document.getElementById('phone').addEventListener('input', function(e) {
+    const x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
+    e.target.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
+});
+    </script>
+</body>
+</html>
